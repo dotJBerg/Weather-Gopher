@@ -18,6 +18,11 @@ type WeatherData struct {
 }
 
 func GetWeather(location string) (*WeatherData, error) {
+	if cachedData, found := getWeatherFromCache(location); found {
+		fmt.Println("Using cached weather data")
+		return cachedData, nil
+	}
+	
 	apiKey:= os.Getenv("OPENWEATHER_API_KEY")
 	if apiKey == "" {
 		return nil, fmt.Errorf("OPENWEATHER_API_KEY environment variable not set")
@@ -31,7 +36,7 @@ func GetWeather(location string) (*WeatherData, error) {
 	params := url.Values{}
 	params.Add("q", location)
 	params.Add("appid", apiKey)
-	params.Add("units", "metric")
+	params.Add("units", "imperial")
 
 	resp, err := client.Get(baseURL + "?" + params.Encode())
 	if err != nil {
@@ -74,5 +79,10 @@ func GetWeather(location string) (*WeatherData, error) {
 			weather.WindSpeed = speed
 		}
 	}
+
+	if err := saveWeatherToCache(location, weather); err != nil {
+		fmt.Printf("Warning: Failed to cach weather data: %v\n", err)
+	}
+
 	return weather, nil
 }
