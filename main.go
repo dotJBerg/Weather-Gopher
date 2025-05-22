@@ -68,17 +68,17 @@ func displayWeather(weather *WeatherData) {
 
 func displayForecast(forecasts []ForecastData) {
 	fmt.Println("\n=================================")
-    fmt.Println("       5-DAY FORECAST")
-    fmt.Println("=================================")
+  fmt.Println("       5-DAY FORECAST")
+  fmt.Println("=================================")
     
-    for _, day := range forecasts {
-        weekday := day.Date.Format("Monday")
-        
-        fmt.Printf("\n%s (%s):\n", weekday, day.Date.Format("Jan 2"))
-        fmt.Printf("  Conditions: %s\n", day.Description)
-        fmt.Printf("  Temperature: %d°F to %d°F\n", day.TempMin, day.TempMax)
-        fmt.Printf("  Humidity: %d%%\n", day.Humidity)
-        fmt.Printf("  Wind: %d mph\n", day.WindSpeed)
-        fmt.Println("  ---------------------------------")
+  for _, day := range forecasts {
+    weekday := day.Date.Format("Monday")
+      
+    fmt.Printf("\n%s (%s):\n", weekday, day.Date.Format("Jan 2"))
+    fmt.Printf("  Conditions: %s\n", day.Description)
+    fmt.Printf("  Temperature: %d°F to %d°F\n", day.TempMin, day.TempMax)
+    fmt.Printf("  Humidity: %d%%\n", day.Humidity)
+    fmt.Printf("  Wind: %d mph\n", day.WindSpeed)
+    fmt.Println("  ---------------------------------")
     }
 }
