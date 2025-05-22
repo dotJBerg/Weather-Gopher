@@ -7,14 +7,15 @@ import (
 	"net/url"
 	"os"
 	"time"
+	"math"
 )
 
 type WeatherData struct {
 	Location  string
-	Temp      float64
+	Temp      int 
 	Condition string
 	Humidity  int
-	WindSpeed float64
+	WindSpeed int
 }
 
 func GetWeather(location string) (*WeatherData, error) {
@@ -59,7 +60,7 @@ func GetWeather(location string) (*WeatherData, error) {
 
 	if main, ok := result["main"].(map[string]interface{}); ok {
 		if temp, ok := main["temp"].(float64); ok {
-			weather.Temp = temp
+			weather.Temp = int(math.Round(temp)) 
 		}
 		if humidity, ok := main["humidity"].(float64); ok {
 			weather.Humidity = int(humidity)
@@ -76,7 +77,7 @@ func GetWeather(location string) (*WeatherData, error) {
 
 	if wind, ok := result["wind"].(map[string]interface{}); ok {
 		if speed, ok := wind["speed"].(float64); ok {
-			weather.WindSpeed = speed
+			weather.WindSpeed = int(math.Round(speed)) 
 		}
 	}
 
