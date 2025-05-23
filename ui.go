@@ -12,28 +12,28 @@ import (
 // Thank you, claude for helping me style :)
 var (
 	titleStyle = lipgloss.NewStyle().
-		Bold(true).
-		Foreground(lipgloss.Color("#FAFAFA")).
-		Background(lipgloss.Color("#7D56F4")).
-		Padding(0, 1).
-		MarginBottom(1)
-	
+			Bold(true).
+			Foreground(lipgloss.Color("#FAFAFA")).
+			Background(lipgloss.Color("#7D56F4")).
+			Padding(0, 1).
+			MarginBottom(1)
+
 	subtitleStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FAFAFA")).
-		Background(lipgloss.Color("#2D3748")).
-		Padding(0, 1)
+			Foreground(lipgloss.Color("#FAFAFA")).
+			Background(lipgloss.Color("#2D3748")).
+			Padding(0, 1)
 
 	infoStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#2D3748")).
-		MarginTop(1)
+			Foreground(lipgloss.Color("#2D3748")).
+			MarginTop(1)
 
 	highlightStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#7D56F4")).
-		Bold(true)
+			Foreground(lipgloss.Color("#7D56F4")).
+			Bold(true)
 
 	errorStyle = lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#FF0000")).
-		Bold(true)
+			Foreground(lipgloss.Color("#FF0000")).
+			Bold(true)
 )
 
 type Model struct {
@@ -94,7 +94,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.loading = true
 				m.forecast = []ForecastData{}
 				m.err = nil
-				
+
 				return m, tea.Batch(
 					m.spinner.Tick,
 					m.fetchForecastCmd(),
@@ -178,4 +178,3 @@ func StartUI(location string, showForecast bool) error {
 	_, err := p.Run()
 	return err
 }
-

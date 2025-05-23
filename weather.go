@@ -3,16 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
 	"time"
-	"math"
 )
 
 type WeatherData struct {
 	Location  string
-	Temp      int 
+	Temp      int
 	Condition string
 	Humidity  int
 	WindSpeed int
@@ -23,8 +23,8 @@ func GetWeather(location string) (*WeatherData, error) {
 		fmt.Println("Using cached weather data")
 		return cachedData, nil
 	}
-	
-	apiKey:= os.Getenv("OPENWEATHER_API_KEY")
+
+	apiKey := os.Getenv("OPENWEATHER_API_KEY")
 	if apiKey == "" {
 		return nil, fmt.Errorf("OPENWEATHER_API_KEY environment variable not set")
 	}
@@ -33,7 +33,7 @@ func GetWeather(location string) (*WeatherData, error) {
 		Timeout: 10 * time.Second,
 	}
 
-	baseURL:= "https://api.openweathermap.org/data/2.5/weather"
+	baseURL := "https://api.openweathermap.org/data/2.5/weather"
 	params := url.Values{}
 	params.Add("q", location)
 	params.Add("appid", apiKey)
@@ -50,7 +50,7 @@ func GetWeather(location string) (*WeatherData, error) {
 	}
 
 	var result map[string]interface{}
-	if err:= json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return nil, fmt.Errorf("error parsing response: %w", err)
 	}
 
@@ -60,7 +60,7 @@ func GetWeather(location string) (*WeatherData, error) {
 
 	if main, ok := result["main"].(map[string]interface{}); ok {
 		if temp, ok := main["temp"].(float64); ok {
-			weather.Temp = int(math.Round(temp)) 
+			weather.Temp = int(math.Round(temp))
 		}
 		if humidity, ok := main["humidity"].(float64); ok {
 			weather.Humidity = int(humidity)
@@ -77,7 +77,7 @@ func GetWeather(location string) (*WeatherData, error) {
 
 	if wind, ok := result["wind"].(map[string]interface{}); ok {
 		if speed, ok := wind["speed"].(float64); ok {
-			weather.WindSpeed = int(math.Round(speed)) 
+			weather.WindSpeed = int(math.Round(speed))
 		}
 	}
 

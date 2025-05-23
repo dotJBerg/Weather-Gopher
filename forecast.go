@@ -3,21 +3,21 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
 	"time"
-	"math"
 )
 
 type ForecastData struct {
-	Date				time.Time
-	TempMin			int	
-	TempMax			int	
-	Condition		string
-	Humidity		int
-	WindSpeed		int	
-	Description	string
+	Date        time.Time
+	TempMin     int
+	TempMax     int
+	Condition   string
+	Humidity    int
+	WindSpeed   int
+	Description string
 }
 
 func GetForecast(location string) ([]ForecastData, error) {
@@ -83,7 +83,7 @@ func GetForecast(location string) ([]ForecastData, error) {
 
 		if main, ok := forecast["main"].(map[string]interface{}); ok {
 			if temp, ok := main["temp_min"].(float64); ok {
-				forecastData.TempMin =	int(math.Round(temp)) 
+				forecastData.TempMin = int(math.Round(temp))
 			}
 			if temp, ok := main["temp_max"].(float64); ok {
 				forecastData.TempMax = int(math.Round(temp))
@@ -99,14 +99,14 @@ func GetForecast(location string) ([]ForecastData, error) {
 					forecastData.Condition = main
 				}
 				if description, ok := weatherMap["description"].(string); ok {
-					forecastData.Description = description	
+					forecastData.Description = description
 				}
 			}
 		}
-	
-		if wind, ok := forecast ["wind"].(map[string]interface{}); ok {
+
+		if wind, ok := forecast["wind"].(map[string]interface{}); ok {
 			if speed, ok := wind["speed"].(float64); ok {
-				forecastData.WindSpeed = int(math.Round(speed)) 
+				forecastData.WindSpeed = int(math.Round(speed))
 			}
 		}
 
@@ -116,6 +116,6 @@ func GetForecast(location string) ([]ForecastData, error) {
 			break
 		}
 	}
-	
-		return forecasts, nil
+
+	return forecasts, nil
 }
