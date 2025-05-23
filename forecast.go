@@ -98,7 +98,7 @@ func GetForecast(location string) ([]ForecastData, error) {
 				if main, ok := weatherMap["main"].(string); ok {
 					forecastData.Condition = main
 				}
-				if description, ok := weatherMap["desceiption"].(string); ok {
+				if description, ok := weatherMap["description"].(string); ok {
 					forecastData.Description = description	
 				}
 			}

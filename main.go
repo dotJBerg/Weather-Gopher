@@ -16,41 +16,47 @@ func main() {
 
 	location := flag.String("location", "", "Location to get weather for")
 	forecast := flag.Bool("forecast", false, "Show 5-day forecast")
+	simple := flag.Bool("simple", false, "Use simple CLI output instead of TUI")
 	flag.Parse()
-	
 
 	if *location == "" {
 		fmt.Println("Please provide a location using the -location flag")
 		fmt.Println("Example: ./weather-gopher -location \"New York\"")
 		os.Exit(1)
 	}
-
-	if *forecast {
-		fmt.Printf("Getting 5-day forecast for: %s\n", *location)
-		forecastData, err := GetForecast(*location)
-		if err != nil {
-			fmt.Printf("Error: %v\n", err)
-			os.Exit(1)
-		}
-
-		displayForecast(forecastData)
-	} else {
-		fmt.Printf("Getting weather for: %s\n", *location)
-		weather, err := GetWeather(*location)
-		if err != nil {
-			if strings.Contains(err.Error(), "OPENWEATHER_API_KEY") {
-				fmt.Println("Error: API key not found. Please set the OPENWEATHER_API_KEY environment variable.")
-				fmt.Println("You can get a free API key from https://openweathermap.org/")
-			} else if strings.Contains(err.Error(), "no such host") {
-			fmt.Println("Error: Could not connect to the weather service. Please check your internet connection.")
-			} else {
+	if *simple {
+		if *forecast {
+			fmt.Printf("Getting 5-day forecast for: %s\n", *location)
+			forecastData, err := GetForecast(*location)
+			if err != nil {
 				fmt.Printf("Error: %v\n", err)
+				os.Exit(1)
 			}
 
+			displayForecast(forecastData)
+		} else {
+			fmt.Printf("Getting weather for: %s\n", *location)
+			weather, err := GetWeather(*location)
+			if err != nil {
+				if strings.Contains(err.Error(), "OPENWEATHER_API_KEY") {
+					fmt.Println("Error: API key not found. Please set the OPENWEATHER_API_KEY environment variable.")
+					fmt.Println("You can get a free API key from https://openweathermap.org/")
+				} else if strings.Contains(err.Error(), "no such host") {
+				fmt.Println("Error: Could not connect to the weather service. Please check your internet connection.")
+				} else {
+					fmt.Printf("Error: %v\n", err)
+				}
+
+				os.Exit(1)
+			}
+	
+			displayWeather(weather)
+		}
+	} else {
+		if err := StartUI(*location, *forecast); err != nil {
+			fmt.Printf("Error running UI: %v\n", err)
 			os.Exit(1)
 		}
-	
-		displayWeather(weather)
 	}
 }
 
